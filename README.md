@@ -1,6 +1,6 @@
 # Data analysis
 - Document here the project: monet_boys
-- Description: Project Description
+- Description: We are using GAN's to create Art
 - Data Source:
 - Type of analysis:
 
