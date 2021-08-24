@@ -12,6 +12,7 @@ tensorflow
 matplotlib
 re
 tensorflow-addons
+scikit-image 
 
 # tests/linter
 black
@@ -31,3 +32,4 @@ six>=1.14
 joblib
 memoized-property
 termcolor
+
