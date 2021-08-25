@@ -75,22 +75,3 @@ if __name__ == '__main__':
 
 
 
-
-   #img = tf.squeeze(example_monet)
-   ##print(img.shape)
-   #img = PIL.Image.fromarray(example_monet, 'RGB')
-   #img.save("../raw_data/test/" + str('test') + ".jpg")
-
-    #'''print(type(example_monet[0]))
-    #print(example_monet.shape)
-    ##img = tf.image.resize(example_monet, IMAGE_SIZE)
-    #img = (example_monet * 127.5 + 127.5).astype(np.uint8)
-    #print(img.shape)
-    ##img = tf.image.convert_image_dtype(img/255.0, dtype=tf.uint8)
-    #img = PIL.Image.fromarray(img, 'RGB')
-    #print(img.shape)
-    #print(f'image is{type(img)}')
-    ##img = Image.fromarray(np.array(img))
-    ##print(f'after iteration image {type(img)}')
-    ##img = Image.open(example_monet)
-    ##img.save("../raw_data/test/" + str('testt') + ".jpg")'''#
