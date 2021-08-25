@@ -9,6 +9,10 @@ import re
 
 '''We want to keep our photo dataset and our Monet dataset separate.
     First, load in the filenames of the TFRecords.'''
+    
+AUTOTUNE = tf.data.experimental.AUTOTUNE
+
+
 
 BATCH_SIZE = 32
 IMAGE_SIZE = [256, 256]
