@@ -12,7 +12,7 @@ import os
 
 '''We want to keep our photo dataset and our Monet dataset separate.
     First, load in the filenames of the TFRecords.'''
-    
+
 AUTOTUNE = tf.data.experimental.AUTOTUNE
 
 
@@ -20,10 +20,13 @@ AUTOTUNE = tf.data.experimental.AUTOTUNE
 BATCH_SIZE = 32
 IMAGE_SIZE = [256, 256]
 
-GCS_PATH = '../raw_data'
+GCS_PATH = 'raw_data'
 
 MONET_FILENAMES = tf.io.gfile.glob(str(GCS_PATH +'/monet_tfrec/*.tfrec'))
 PHOTO_FILENAMES = tf.io.gfile.glob(str(GCS_PATH +'/photo_tfrec/*.tfrec'))
+
+CEZANNE_FILENAMES = tf.io.gfile.glob(str(GCS_PATH +'/trainA/*.jpg'))
+
 
 def decode_image(image):
     '''All the images for the competition are already sized to 256x256. As these images are RGB images, set the channel to 3.
@@ -38,7 +41,7 @@ def decode_image(image):
 
     return image
 
-
+## Read images from tfrec directory
 def read_tfrecord(example):
     '''Because we are building a generative model,
     we don't need the labels or the image id so we'll only return the image
@@ -54,7 +57,6 @@ def read_tfrecord(example):
     print('read_tfrecord')
     return image
 
-
 def load_dataset(filenames):
     '''Define a function to extract the image from the files.'''
     dataset = tf.data.TFRecordDataset(filenames)
@@ -62,20 +64,45 @@ def load_dataset(filenames):
     print('load_dataset')
     return dataset
 
+## Read images from jpg directory
+def read_image(file):
+    '''Alternative method for reading images from a jpg.'''
+
+    example = tf.io.read_file(file)
+    image = decode_image(example)
+    print('read_image')
+    return image
+
+def load_jpg_dataset(filenames):
+    '''Define a function to extract the image from the files in a jpg format.'''
+    dataset = tf.data.Dataset.from_tensor_slices(filenames)
+    dataset = dataset.map(read_image)
+
+    print('load_jpg_dataset')
+    return dataset
+
+
 if __name__ == '__main__':
-    #print(len(MONET_FILENAMES))
-    #print(len(PHOTO_FILENAMES))
-    #dataset = load_dataset
-    monet_ds = load_dataset(MONET_FILENAMES).batch(1)
-    example_monet = next(iter(monet_ds)).numpy()
-    print(example_monet.shape)
-    print(type(example_monet))
-    example_monet = (example_monet * 127.5 + 127.5).astype(np.uint8)
-    print(example_monet.shape)
-    img = example_monet
-    img=img[0]
-    img = PIL.Image.fromarray(img)
-    img.save(GCS_PATH+"/test/" + str('test_monet') + ".jpg")
+    print(len(CEZANNE_FILENAMES))
+    # print(len(PHOTO_FILENAMES))
+
+    cezanne_ds = load_jpg_dataset(CEZANNE_FILENAMES)
+    example_cezanne = next(iter(cezanne_ds)).numpy()
+    img = example_cezanne
+    example_cezanne = (example_cezanne * 127.5 + 127.5).astype(np.uint8)
+    img = PIL.Image.fromarray(example_cezanne)
+    img.save(GCS_PATH+"/test/" + str('test_cezanne') + ".jpg")
+
+    # monet_ds = load_dataset(MONET_FILENAMES).batch(1)
+    # example_monet = next(iter(monet_ds)).numpy()
+    # print(example_monet.shape)
+    # print(type(example_monet))
+    # example_monet = (example_monet * 127.5 + 127.5).astype(np.uint8)
+    # print(example_monet.shape)
+    # img = example_monet
+    # img=img[0]
+    # img = PIL.Image.fromarray(img)
+    # img.save(GCS_PATH+"/test/" + str('test_monet') + ".jpg")
 
 
 
