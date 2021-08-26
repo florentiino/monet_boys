@@ -23,5 +23,7 @@ def upload_to_bucket(blob_name, file_path, bucket_name):
         print(e)
         return False
     
-filepath = 'images'
-upload_to_bucket('upload1',os.path.join(filepath,'impression.Sunrise.jpg'),bucket_name)
+filepath = ''
+upload_to_bucket('frontend_upload_images/upload2',os.path.join(filepath,'pic.jpg'),bucket_name)
+
+storage.bucket(bucket_name).object()
