@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "batch-672-gan-monet",
+  "private_key_id": "59f43b305ef6956551546b99bd08df282284732f",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQC7JyxNFhGgu4Lm\nlp1PVUDNJl132qRFedqskZiPjoxQlh/+7LWLqiAOrbYq8Qognjdiz6xyOEakI6Cd\nj71aZjrmliokOumBeD5jrQmWMJiHyys7v1LWp0NbwfUVqTnYNpPFtjiwj2rsVJym\naf/C/yR8VsmygI7nSCOdHsyxP2DutWx26N5nFEJpaEM0DTv2REMZ5opuc7xGkaTw\nWhcW2y9Zn+ID1nw7sioa46jRO7e9F8372Rmc7Zq0vZ1wUncKPVXR+Cqi42NVF1nU\nVS2gJ4pUtWICQOi1A/N8rW5cqglkI2tsyTMxTmyG4yY94PoURObv2TwK2enXxAck\nftgyvBatAgMBAAECggEAPsCTR6OjNIA7E4Mj6wJccI0xIOtkUlFZ46wL+fKjlK/J\nuan384UPK6zOXJamvSofyxd0LHY3JXk2tS4JoSKPFFr8dVp1ii5dyQEvqjbQJhQX\nAnkT1xqNaNpfiaxM03T1VoFTf8wO34A9aEU5d1Iikzhsd9hIUj9rhZbaroHgSBll\nHxIQOts6IwiZVb2Hd7Vls3SuCOzTCK8g+RaAjlxk0Nsjm7gNDcU8hKnrQNh3vHGy\nH7t2uO9BukDP38k3L95dgS/jRAGU89Afuq2vSuldfyYzsSf8zVqK4Twg2/KfrWkl\nZdaGFwWtgiQLmOntqHDGtZdTzyqDeBPiBejigOn4FwKBgQDedoc+KVsjeGZPmg0u\nKt+enVSsicIlw4iBLephU6xnyGSCXbKcc0whZaXPuTo7OU7cGm741vyuoosBe1fF\nhvJPwgBsfGqxp7j/zbOF9rZgBpjd+IXfzCU6p+me99xzxC6OzRy+rjJ7V5antp1w\nVXgzaa3MgfBMx2Ihcb4wr2uFkwKBgQDXXe725kqXw9adl6v8a/n6Nr9pexbcV0/V\nx1Li9a3+ed5fhz+n6YENcd8DZDACWXe0JhJwo9qU5p111mK7nMDUH+Zy+Bbb5Ej/\nOStqOaXpPY37Q6/FFgJcruoUL3JmRgcDuIqMjRWKSJoIch/1YsK3MIT4ziZXvAz9\n6jf5KdOavwKBgBqH+EkplXz9dvY3YSsIYfMAwIBzTXxDfZwqZbGF0SHvfE0v74VJ\nGuNAxC2p4Y/+nbESVfnHagtJx1o945HjLjLk6DgH/pGBd0bKuYZYjheVsdWHNjAi\noK4GKI6U8O29j+/n9m2nSM38/DK0TMKA7vzytY+WT5pYjROABTa5NRGRAoGAeoMr\n6fXNHxI/pvxd0MUXudelAXsM4SEmACVYKFW7udRXxJ3qfzlcuWo6g/JdQSjl6Gvz\n93GuaR/bGOpw1erw4nqXHHW2gzYUtGMwKEhM8iaa+wFhHstLYq/55quq9zUEzoAP\nCK9FPpnYTc+mEHAy9gS6z9Jti2ElPtgbKTk6738CgYEAww17UNDXDIrYJeP0KB9I\nche9ycNW+/7gjyHouh2boMCO9tWsTP45Ul1ZOJRDSwyJq88BT0pTG00jfk1VV4dw\n7NT3Fcd0Im80BcuLh6TXJPM9H2mDj1EM15iKtJ+4S2EW0bwenouBdFZ1X6k/0KpP\nLDlJB7waEx1yT30T8dM/VNQ=\n-----END PRIVATE KEY-----\n",
+  "client_email": "cloudstorage672monet@batch-672-gan-monet.iam.gserviceaccount.com",
+  "client_id": "100171413277382233067",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/cloudstorage672monet%40batch-672-gan-monet.iam.gserviceaccount.com"
+}
