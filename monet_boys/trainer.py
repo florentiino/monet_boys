@@ -1,4 +1,3 @@
-print('Step 1 imports')
 import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras import layers
@@ -113,3 +112,6 @@ with strategy.scope():
     tf.data.Dataset.zip((monet_ds, photo_ds)),
     epochs=1
     )
+
+    cycle_gan_model.save('my_model.h5')
+
