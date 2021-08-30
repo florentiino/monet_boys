@@ -1,0 +1,9 @@
+streamlit
+Image
+google.cloud 
+google.cloud.core 
+google.auth 
+google.api.core
+google.cloud.storage
+google.resumable.media
+requests
