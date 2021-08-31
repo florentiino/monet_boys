@@ -25,7 +25,7 @@ import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras import layers
 
-from utils import downsample, upsample
+from monet_boys.utils import downsample, upsample
 
 # Global variables
 
