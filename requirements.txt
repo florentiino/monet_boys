@@ -12,7 +12,7 @@ tensorflow
 matplotlib
 re
 tensorflow-addons
-scikit-image 
+scikit-image
 
 # tests/linter
 black
