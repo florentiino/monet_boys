@@ -15,7 +15,7 @@ def set_distributed_training_strategy():
         print('Device:', tpu.master())
         tf.config.experimental_connect_to_cluster(tpu)
         tf.tpu.experimental.initialize_tpu_system(tpu)
-        strategy = tf.distribute.experimental.TPUStrategy(tpu)
+        strategy = tf.distribute.TPUStrategy(tpu)
     except:
         strategy = tf.distribute.get_strategy()
     print('Number of replicas:', strategy.num_replicas_in_sync)

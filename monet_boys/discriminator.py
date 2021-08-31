@@ -17,7 +17,7 @@ import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras import layers
 import tensorflow_addons as tfa
-from utils import downsample
+from monet_boys.utils import downsample
 
 def Discriminator():
     initializer = tf.random_normal_initializer(0., 0.02)
