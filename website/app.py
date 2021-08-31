@@ -3,8 +3,9 @@ import streamlit as st
 from PIL import Image
 from google.cloud import storage
 import requests
+from monet_boys import generator
 
-    
+
 
 def file_selector(folder_path='.'):
     filenames = os.listdir(folder_path)
@@ -17,23 +18,23 @@ if __name__ == '__main__':
     st.markdown("""# Transform any image into a monet-painting
     ##Upload an image
     """)
-    
-    
-    
+
+
+
     if st.checkbox('Select a file in current directory'):
         folder_path = '.'
         if st.checkbox('Change directory'):
             folder_path = st.text_input('Enter folder path', '.')
         filepath = file_selector(folder_path=folder_path)
         #st.write('You selected `%s`' % filepath)
-        
+
         if filepath.endswith("jpg"):
             image = Image.open(filepath)
             st.image(image, caption=st.markdown('''#Uploaded File'''), use_column_width=False)
-            
-       
+
+
 ############# GOOGLE CLOUD PLATFORM #########################################
-        
+
         os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'google-credentials.json'
 
         storage_client = storage.Client()
@@ -42,7 +43,7 @@ if __name__ == '__main__':
 
 
         #Accessing the bucket
-        
+
         my_bucket = storage_client.get_bucket(bucket_name)
 
         #Uploading files
@@ -57,13 +58,13 @@ if __name__ == '__main__':
                 except Exception as e:
                     print(e)
                     return False
-        
-            #calling the upload function   
-            
-            filename_upload = f'frontend_upload_images{filepath}'
-            
 
-            #downloading file from bucket 
+            #calling the upload function
+
+            filename_upload = f'frontend_upload_images{filepath}'
+
+
+            #downloading file from bucket
             if upload_to_bucket(filename_upload,filepath,bucket_name):
                 def download_from_bucket(blob_name, file_path, bucket_name):
                     try:
@@ -76,18 +77,15 @@ if __name__ == '__main__':
                     except Exception as e:
                         print(e)
                         return False
-                    
+
                 #calling the download function
                 folder_name = 'frontend_download_images'
                 filename_download = filepath[2:]
                 download_from_bucket(f'{folder_name}/{filepath}',os.getcwd(),bucket_name)
-                
+
                 image2 = Image.open(filename_download)
                 st.image(image2, caption=st.markdown('''#Downloaded Image'''), use_column_width=False)
-        
-        
-        
-            
-            
-            
-        
+
+
+
+#generator.main()
