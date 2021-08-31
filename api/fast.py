@@ -5,7 +5,7 @@ def index():
     #load a ML model
     #model.predict
     
-    return {"ok":"whatever"}
+    return {"ok":"hello boys"}
 
 @app.get("/predict")
 def predict(day_of_week, time):
