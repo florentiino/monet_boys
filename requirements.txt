@@ -10,7 +10,6 @@ pandas
 scikit-learn
 tensorflow
 matplotlib
-re
 tensorflow-addons
 scikit-image
 
@@ -33,3 +32,10 @@ joblib
 memoized-property
 termcolor
 
+
+# image processing
+pillow
+
+# API
+uvicorn
+fastapi
