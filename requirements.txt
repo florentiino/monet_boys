@@ -34,7 +34,7 @@ termcolor
 
 
 # image processing
-pillow
+Pillow
 
 # API
 uvicorn

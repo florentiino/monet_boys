@@ -3,9 +3,6 @@ import os
 import time
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from datetime import datetime
-import pytz
-import joblib
 
 from google.cloud import storage
 
@@ -14,7 +11,6 @@ import tensorflow.keras as keras
 from tensorflow.keras import layers
 import tensorflow_addons as tfa
 import numpy as np
-import matplotlib.pyplot as plt
 import PIL
 
 ## Global variables
@@ -132,7 +128,7 @@ app.add_middleware(
 
 @app.get("/")
 def index():
-    return {"greeting": "Hello woorld"}
+    return {"greeting": "GiGANtik hello to everyone"}
 
 @app.get("/download")
 def download():
@@ -163,11 +159,11 @@ def upload():
     blob.upload_from_filename(origin_filename)
 
 @app.get("/predict-locally")
-def predict_locally(image_name, painter_name):
+def predict_locally(painter_name):
     # Load image, resize if necessary
     IMAGE_SIZE = [256, 256]
 
-    image_path = f'raw_data/images/{image_name}.jpg'
+    image_path = f'raw_data/images/input.jpg'
 
     image = PIL.Image.open(image_path)
 
@@ -210,7 +206,7 @@ def predict_locally(image_name, painter_name):
     painter_prediction = (painter_prediction * 127.5 + 127.5).astype(np.uint8)
 
     transformed_image = PIL.Image.fromarray(painter_prediction)
-    transformed_image.save('raw_data/images/' + image_name + '_' + painter_name + ".jpg")
+    transformed_image.save(f'raw_data/images/output_{painter_name}.jpg')
 
     end_load_2 = time.time()
 
