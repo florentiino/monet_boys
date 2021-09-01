@@ -1,4 +1,5 @@
 import uvicorn
+import os
 import time
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -6,6 +7,7 @@ from datetime import datetime
 import pytz
 import joblib
 
+from google.cloud import storage
 
 import tensorflow as tf
 import tensorflow.keras as keras
@@ -19,7 +21,17 @@ import PIL
 
 OUTPUT_CHANNELS = 3
 
-## Useful functions definitions
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'raw_data/batch-672-gan-monet.json'
+
+project_name = 'batch-672-gan-monet'
+bucket_name = 'bucket-monet-gan'
+
+# PROJECT = "bucket-monet-gan"  # change for your GCP project
+# REGION = "europe-west1"
+# MODEL = "cezanne_v1_1"
+
+
+## Useful functions definitions - MODEL
 
 def downsample(filters, size, apply_instancenorm=True):
     initializer = tf.random_normal_initializer(0., 0.02)
@@ -122,12 +134,36 @@ app.add_middleware(
 def index():
     return {"greeting": "Hello woorld"}
 
-@app.get("/predict")
-def predict(image_name, painter_name):
+@app.get("/download")
+def download():
+    origin_filename = 'test/test_iceland.jpg' # in bucket
+    destination_filename = 'raw_data/images/output.jpg' # in package
 
-    # Import Cycle GAN trained model (First in local)
-    painter_path = '/home/amineea/code/florentiino/monet_boys/raw_data/weights/output_cezanne/cezanne_model.h5'
+    # Initialise a client
+    storage_client = storage.Client()
+    # Create a bucket object for our bucket
+    bucket = storage_client.get_bucket(bucket_name)
+    # Create a blob object from the filepath
+    blob = bucket.blob(origin_filename)
+    # Download the file to a destination
+    blob.download_to_filename(destination_filename)
 
+@app.get("/upload")
+def upload():
+    origin_filename = 'raw_data/images/output.jpg' # in package
+    destination_filename = "test/test_iceland_after.jpg"# in bucket
+
+    # Initialise a client
+    storage_client = storage.Client()
+    # Create a bucket object for our bucket
+    bucket = storage_client.get_bucket(bucket_name)
+    # Create a blob object from the filepath
+    blob = bucket.blob(destination_filename)
+    # Download the file to a destination
+    blob.upload_from_filename(origin_filename)
+
+@app.get("/predict-locally")
+def predict_locally(image_name, painter_name):
     # Load image, resize if necessary
     IMAGE_SIZE = [256, 256]
 
@@ -156,7 +192,7 @@ def predict(image_name, painter_name):
 
     # Import and load trained model
 
-    painter_path = f'raw_data/weights/output_{painter_name}/{painter_name}_model.h5'
+    painter_path = f'raw_data/weights/output_{painter_name}/{painter_name}_weights.h5'
 
     painter_generator = Generator()
 
@@ -180,8 +216,7 @@ def predict(image_name, painter_name):
 
     loading_transforming_time = end_load_2 - start_load
 
-
-    #Retrun dictionary
+    #Return dictionary
 
     return_dict = dict(
         imsize=old_size,
@@ -192,51 +227,95 @@ def predict(image_name, painter_name):
         time_loading = loading_time,
         tome_loading_transorming = loading_transforming_time
     )
+    return return_dict
 
+
+@app.get("/predict")
+def predict_locally(painter_name):
+    # Load image, resize if necessary
+    IMAGE_SIZE = [256, 256]
+
+    in_image_path = 'raw_data/images/fromGCP/input.jpg' # in package
+    out_image_path = f'raw_data/images/fromGCP/output_{painter_name}.jpg' # in package
+    GCP_origin_filename = 'api_call/input.jpg' # in bucket
+    GCP_destination_filename = f'api_call/output_{painter_name}.jpg'
+
+    ## Download image from GCP
+    # Initialise a client
+    storage_client = storage.Client()
+    # Create a bucket object for our bucket
+    bucket = storage_client.get_bucket(bucket_name)
+    # Create a blob object from the filepath
+    blob = bucket.blob(GCP_origin_filename)
+    # Download the file to a destination
+    blob.download_to_filename(in_image_path)
+
+    image = PIL.Image.open(in_image_path)
+
+    old_size = image.size
+
+    if image.size != (256,256):
+        image = image.resize((256,256))
+
+    new_image_path = in_image_path.replace('.', '_new.')
+
+    image.save(new_image_path)
+
+    # Load (resized) image as tensor and apply preprocessing (rescaling)
+
+    input_tensor = tf.io.read_file(new_image_path)
+
+    imagetensor = tf.image.decode_jpeg(input_tensor, channels=3)
+    imagetensor = (tf.cast(imagetensor, tf.float32) / 127.5) - 1
+
+    imagetensor = tf.reshape(imagetensor, [*IMAGE_SIZE, 3])
+    imagetensor = tf.expand_dims(imagetensor, axis=0)
+
+    # Import and load trained model
+
+    painter_path = f'raw_data/weights/output_{painter_name}/{painter_name}_weights.h5'
+
+    painter_generator = Generator()
+
+    start_load = time.time()
+
+    painter_generator.load_weights(painter_path)
+
+    end_load = time.time()
+
+    loading_time = end_load - start_load
+
+    # Image transformation
+
+    painter_prediction = painter_generator(imagetensor, training=False)[0].numpy()
+    painter_prediction = (painter_prediction * 127.5 + 127.5).astype(np.uint8)
+
+    transformed_image = PIL.Image.fromarray(painter_prediction)
+    transformed_image.save(out_image_path)
+
+    end_load_2 = time.time()
+
+    loading_transforming_time = end_load_2 - start_load
+
+    # Create a blob object from the filepath
+    blob_out = bucket.blob(GCP_destination_filename)
+    # Download the file to a destination
+    blob_out.upload_from_filename(out_image_path)
+
+    #Return dictionary
+
+    return_dict = dict(
+        success=True,
+        imsize=old_size,
+        new_name=new_image_path,
+        newsize=image.size,
+        typetensor=str(imagetensor.shape),
+        painterpath=painter_path,
+        time_loading = loading_time,
+        tome_loading_transorming = loading_transforming_time
+    )
     return return_dict
 
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8080)
-
-
-
-    # # create datetime object from user provided date
-    # pickup_datetime = datetime.strptime(pickup_datetime, "%Y-%m-%d %H:%M:%S")
-
-    # # localize the user provided datetime with the NYC timezone
-    # eastern = pytz.timezone("US/Eastern")
-    # localized_pickup_datetime = eastern.localize(pickup_datetime, is_dst=None)
-
-    # # convert the user datetime to UTC
-    # utc_pickup_datetime = localized_pickup_datetime.astimezone(pytz.utc)
-
-    # # format the datetime as expected by the pipeline
-    # formatted_pickup_datetime = utc_pickup_datetime.strftime("%Y-%m-%d %H:%M:%S UTC")
-
-    # # fixing a value for the key, unused by the model
-    # # in the future the key might be removed from the pipeline input
-    # # eventhough it is used as a parameter for the Kaggle submission
-    # key = "2013-07-06 17:18:00.000000119"
-
-    # # build X ⚠️ beware to the order of the parameters ⚠️
-    # X = pd.DataFrame(dict(
-    #     key=[key],
-    #     pickup_datetime=[formatted_pickup_datetime],
-    #     pickup_longitude=[float(pickup_longitude)],
-    #     pickup_latitude=[float(pickup_latitude)],
-    #     dropoff_longitude=[float(dropoff_longitude)],
-    #     dropoff_latitude=[float(dropoff_latitude)],
-    #     passenger_count=[int(passenger_count)]))
-
-    # # pipeline = get_model_from_gcp()
-    # pipeline = joblib.load('model.joblib')
-
-    # # make prediction
-    # results = pipeline.predict(X)
-
-    # # convert response from numpy to python type
-    # pred = float(results[0])
-
-    #return dict(prediction=pred)
-
