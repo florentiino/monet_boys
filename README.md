@@ -1,10 +1,11 @@
-# Data analysis
-- Document here the project: monet_boys
-- Description: We are using GAN's to create Art
-- Data Source:
-- Type of analysis:
+# Using machine learning to create drawings in the style of famous painters
 
-Please document the project the better you can.
+# Data analysis
+- Description: We analyzed various image datasets of painters to predict brushstrokes and train a model to transform a given photo.
+- Data Source: [Model Zoo](https://github.com/junyanz/CycleGAN#model-zoo) monet2photo, vangogh2photo, ukiyoe2photo, cezanne2photo: The art images were downloaded from [Wikiart](https://www.wikiart.org/). The real photos are downloaded from Flickr using the combination of the tags landscape and landscapephotography. The training set size of each class is Monet:1074, Cezanne:584, Van Gogh:401, Ukiyo-e:1433, Photographs:6853.
+- Type of analysis: Implementing [cycle GAN](https://software.intel.com/content/www/us/en/develop/articles/improving-cycle-gan-using-intel-ai-devcloud.html) to generate the most accurate painting possible 
+- Functional frontend can be found [here](showmeyourgans.herokuapp.com) 
+
 
 # Startup the project
 
